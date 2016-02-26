@@ -72,6 +72,8 @@ CSHEN===========================================================================
        Integer :: IVisflag=0          ! Flag for temperature dependent eta/s, 0: constant, 1: temperature dependent, which is defined in function ViscousCTemp(T)
        Integer :: IOSCARWrite       ! output OCCAR file path number
 CSHEN===========================================================================
+       Integer :: IhydroJetoutput    ! Output control for hydro evolution history
+       common /hydroJetoutput/ IhydroJetoutput
 
 CSHEN===EOS from tables========================================================
       Integer, Parameter :: RegEOSdatasize = EOSDATALENGTH !converted EOS table size
@@ -178,6 +180,11 @@ C========= Inputting Parameters ===========================================
       Read(1,*) Edec             ! decoupling energy density [GeV/fm^3]
       Read(1,*) Ifreez           ! whether to freeze-out regions initially below Edec
       Read(1,*) Edec0            ! minimum energy density for Ifreez == 1
+     
+      ! output hydro evolution file
+      Read(1,*) Cha
+      Read(1,*) IhydroJetoutput
+
       Read(1,*) NDX,NDY          ! freeze-out step in x, y directions
       Read(1,*) NDT              ! freeze-out step in tau direction
 
@@ -243,6 +250,7 @@ C ***************************J.Liu changes end***************************
      &    "LS=", LS, "R0Bdry", R0Bdry, "VisBeta=", VisBeta,
      &    "DX=", DX, "DY=", DY, "DT_1=", DT_1,
      &    "NDX=", NDX, "NDY=", NDY, "NDT=", NDT,
+     &    "IhydroJetoutput=", IhydroJetoutput
      &    "IVisflag=", IVisflag,
      &    "IVisBulkFlag=", IVisBulkFlag,
      &    "Initialpitensor=", Initialpitensor,
@@ -299,6 +307,12 @@ CSHEN======output OSCAR file Header=========================================
      &                             NYPhy0, NYPhy, T0, DX, DY)
       endif
 CSHEN======output OSCAR file Header end=====================================
+
+
+CSHEN======set up output file for hydro evolution history ==================
+      if(IhydroJetoutput .eq. 1) then
+        call setHydroFiles(NX0, NX, DX, 2, NY0, NY, DY, 2, T0, DT, 5)
+      endif
 
       Call Mainpro(NX0,NY0,NZ0,NX,NY,NZ,NXPhy0,NYPhy0,
      &          NXPhy,NYPhy,T0,DX,DY,DZ,DT,MaxT,NDX,NDY,NDT)   ! main program
@@ -505,7 +519,9 @@ C==========OSCAR2008H related parameters===================================
 
       Integer :: Tau_idx
 CSHEN=========end==========================================================
-
+      Integer :: IhydroJetoutput
+      common/hydroJetoutput/ IhydroJetoutput
+ 
 CSHEN===EOS from tables========================================================
       Integer, Parameter :: RegEOSdatasize = EOSDATALENGTH  !converted EOS table size
       double precision :: PEOSdata(RegEOSdatasize),
@@ -804,6 +820,13 @@ CSHEN====END====================================================================
       End Do
       End Do
       End Do
+
+      if(IhydroJetoutput .eq. 1) then
+        call writeHydroBlock(ITime-1, Ed*HbarC, sd, PL*HbarC,
+     &      Temp*HbarC, Vx, Vy, Pi00*HbarC, Pi01*HbarC, Pi02*HbarC,
+     &      Pi02*HbarC*0.0d0, Pi11*HbarC, Pi12*HbarC, Pi12*HbarC*0.0d0,
+     &      Pi22*HbarC, Pi22*HbarC*0.0d0, Pi33*HbarC, PPI*HbarC)
+      endif
 
 CSHEN===========================================================================
 C====output the OSCAR body file from hydro evolution============ ===============
