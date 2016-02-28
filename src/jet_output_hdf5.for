@@ -68,6 +68,56 @@
       end
 !-----------------------------------------------------------------------
 
+
+
+
+
+!-- Yingru: add a JetCtl.dat file
+!**********************************************************************
+      Subroutine writeHydroFilesCtl(XL_in, XH_in, DX_in, LSX_in,
+     &                            YL_in, YH_in, DY_in, LSY_in,
+     &                            Tau0_in, dTau_in, LST_in, ctlID_in)
+     
+      Implicit None
+      CHARACTER(LEN=20) :: HydroCtlFilename = "results/JetCtl.dat"  ! filename
+      Integer :: ctlID_in
+      CHARACTER(LEN=20) :: ctlgroupname = "/Event"  ! group name
+      Common /CtlFile/ HydroCtlFilename, ctlgroupname
+      
+      
+      Integer :: XL_in, XH_in, YL_in, YH_in
+      Double Precision :: DX_in, DY_in, Tau0_in, dTau_in
+      Integer :: LSX_in, LSY_in, LST_in
+      
+      Integer :: LXL, LXH, LYL, LYH
+      Double Precision :: LDX, LDY, LT0, LDT
+      
+      LXL = XL_in / LSX_in
+      LXH = XH_in / LSX_in
+      LDX = DX_in * LSX_in
+      
+      LYL = YL_in / LSY_in
+      LYH = YH_in / LSY_in
+      LDY = DY_in * LSY_in
+      
+      LT0 = Tau0_in
+      LDT = dTau_in * LST_in
+      
+      open(CtlID_in, FILE=HydroCtlFilename, STATUS='REPLACE')
+      write(CtlID_in, '(I8,I8,E20.8,I8,I8,E20.8,E20.8,E20.8)')
+     &              LXL,LXH,LDX,LYL,LYH,LDY,LT0,LDT
+      close(ctlID_in)
+      
+      End Subroutine 
+
+! end of Yingru's modification
+!------------------------------------------------------------------------
+
+
+
+
+
+
 !***********************************************************************
       Subroutine writeGroupattribute(group_id)
       Use HDF5
