@@ -315,7 +315,7 @@ CSHEN======set up output file for hydro evolution history ==================
 !        call setHydroFiles(NX0, NX, DX, 2, NY0, NY, DY, 2, T0, DT, 5)
         call setHydroFiles(NX0, NX, DX, 5, NY0, NY, DY, 5, T0, DT, 1)
         call writeHydroFilesCtl(NX0, NX, DX, 5, NY0, NY, DY, 5, T0,
-    &                            DT, 1, 3801)
+     &                          DT, 1, 3801)
       endif
 
       Call Mainpro(NX0,NY0,NZ0,NX,NY,NZ,NXPhy0,NYPhy0,
