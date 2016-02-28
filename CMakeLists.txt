@@ -16,6 +16,21 @@ endif()
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 message(STATUS "Install prefix: ${CMAKE_INSTALL_PREFIX}")
 
+find_library(HDF5_FORTRAN_LIB hdf5_fortran)
+if("${HDF5_FORTRAN_LIB}" STREQUAL "HDF5_FORTRAN_LIB-NOTFOUND")
+  message(STATUS "HDF5 fortran library not found")
+endif()
+
+find_path(HDF5_INCLUDE_DIRS hdf5.mod)
+#set(HDF5_INCLUDE_DIRS /usr/include)
+if("${HDF5_INCLUDE_DIRS}" STREQUAL "HDF5_INCLUDE_DIRS-NOTFOUND")
+  message(STATUS "HDF5 include file not found")
+endif()
+
+find_library(HDF5_C_LIB hdf5)
+include_directories(${HDF5_INCLUDE_DIRS}$)
+
+
 # Set default architecture flags to optimize for the current system,
 # but don't override user settings.
 if(NOT CMAKE_Fortran_FLAGS MATCHES "-march|-mtune")
