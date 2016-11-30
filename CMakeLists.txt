@@ -13,6 +13,20 @@ if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
       FORCE)
 endif()
 
+find_package(HDF5 COMPONENTS Fortran)
+if(HDF5_FOUND)
+  message(STATUS "hdf5 found")
+  message(STATUS ${HDF5_INCLUDE_DIRS} )
+  message(STATUS ${HDF5_Fortran_LIBRARIES})
+  message(STATUS ${HDF5_LIBRARIES})
+  include_directories(${HDF5_INCLUDE_DIRS})
+
+else()
+  message(STATUS "hdf5 not found")
+endif()
+
+
+
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 message(STATUS "Install prefix: ${CMAKE_INSTALL_PREFIX}")
 

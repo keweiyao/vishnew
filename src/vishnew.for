@@ -21,7 +21,7 @@ C   [5] H.Song, Ph.D thesis 2009, arXiv:0908.3656 [nucl-th].
 #include "defs.h"
 
       Program Main
-
+      
       Implicit Double Precision (A-H, O-Z)
       Integer LS
       Integer NXPhy0, NYPhy0
@@ -160,6 +160,10 @@ CSHEN===END================================================================
       NX0=NXPhy0-5
       NY0=NYPhy0-5
       NZ0=1
+
+!------------Adding back hydro history output to hdf5 file--------------
+      Call setHydroFiles(NX0, NX, DX, 2, NY0, NY, DY, 2, T0, DT, 2)
+
 
       Call Mainpro(NX0,NY0,NZ0,NX,NY,NZ,NXPhy0,NYPhy0,
      &          NXPhy,NYPhy,T0,DX,DY,DZ,DT,MaxT,NDX,NDY,NDT)   ! main program
@@ -559,7 +563,11 @@ CSHEN====END====================================================================
      &      ITime, Time, maxval(Ed)*HBarC, maxval(Temp)*HBarC,
      &      iRegulateCounter, iRegulateCounterBulkPi
 
-
+!--------------Add back hydro history output to hdf5 file-----------------------------
+      Call writeHydroBlock(ITime-1, Ed*HbarC, Sd, PL*HbarC,
+     &      Temp*HbarC,Vx, Vy, Pi00*HbarC, Pi01*HbarC, Pi02*HbarC, 
+     &      Pi02*HbarC*0.0d0, Pi11*HbarC, Pi12*HbarC, Pi12*HbarC*0.0d0,
+     &      Pi22*HbarC, Pi22*HbarC*0.0d0, Pi33*HbarC, PPI*HbarC)
 C~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 C~~~~     Freezeout Procedure (rewritten from Petor's code azhydro0p2)  A   ~~~~
 C~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
