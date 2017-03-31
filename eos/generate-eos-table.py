@@ -241,7 +241,7 @@ def main():
         help='connection range maximum temperature'
     )
     parser.add_argument(
-        '--Tmax', type=float, default=.500,
+        '--Tmax', type=float, default=.900,
         help='maximum temperature'
     )
     parser.add_argument(

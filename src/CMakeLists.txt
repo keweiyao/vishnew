@@ -6,9 +6,10 @@ add_executable(${PROJECT_NAME}
   input_function.for
   phy_boundary.for
   Jetoutputh5.for
+  util.for
   vishnew.for
 )
 
 target_link_libraries(${PROJECT_NAME} ${HDF5_LIBRARIES})
 
-install(TARGETS ${PROJECT_NAME} DESTINATION ${PROJECT_NAME})
+install(TARGETS ${PROJECT_NAME} DESTINATION bin)

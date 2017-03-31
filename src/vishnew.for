@@ -67,11 +67,13 @@ C   [5] H.Song, Ph.D thesis 2009, arXiv:0908.3656 [nucl-th].
       Double Precision T0 ! initial time tau_0
       Common /T0/ T0
 
+      character(len=1000) :: find_data_file
+
       call prepareInputFun() ! this is the initialization function in InputFun.for
 
 !----------Start of reading parameters from file------------------------
 C========= Inputting Parameters ===========================================
-      Open(1,FILE='vishnew.conf',STATUS='OLD')
+      Open(1,FILE=find_data_file('vishnew.conf'), STATUS='OLD')
 
       ! initialization
       Read(1,*) T0               ! initial time [fm]
