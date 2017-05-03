@@ -67,6 +67,7 @@ C===============================================================================
        Integer NX, NY, NZ
        Integer NX0,NY0, NZ0         ! dimension
 
+	   character(len=1000) :: find_data_file
 CSHEN===========================================================================
        Logical :: IOSCAR=.false.            ! trigger for output OSCAR format hydro results, False: not output, True: output
        Integer :: IVisflag=0          ! Flag for temperature dependent eta/s, 0: constant, 1: temperature dependent, which is defined in function ViscousCTemp(T)
@@ -161,7 +162,8 @@ C *******************************J.Liu changes end***************************
 
 !----------Start of reading parameters from file------------------------
 C========= Inputting Parameters ===========================================
-      Open(1,FILE='vishnew.conf',STATUS='OLD')
+	  
+      Open(1,FILE=find_data_file('vishnew.conf'),STATUS='OLD')
 
       ! initialization
       Read(1,*) T0               ! initial time [fm]
@@ -311,11 +313,7 @@ CSHEN======output OSCAR file Header end=====================================
 
 CSHEN======set up output file for hydro evolution history ==================
       if(IhydroJetoutput .eq. 1) then
-! Modified by Yingru (to match the input for Langevin)     
-!        call setHydroFiles(NX0, NX, DX, 2, NY0, NY, DY, 2, T0, DT, 5)
-        call setHydroFiles(NX0, NX, DX, 5, NY0, NY, DY, 5, T0, DT, 1)
-        call writeHydroFilesCtl(NX0, NX, DX, 5, NY0, NY, DY, 5, T0,
-     &                          DT, 1, 3801)
+        Call setHydroFiles(NX0, NX, DX, 2, NY0, NY, DY, 2, T0, DT, 2)
       endif
 
       Call Mainpro(NX0,NY0,NZ0,NX,NY,NZ,NXPhy0,NYPhy0,

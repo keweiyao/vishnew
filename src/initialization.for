@@ -333,7 +333,7 @@ c          write(210,'(261(D24.14))')  (U0(I,J,NZ0), J=NYPhy0, NYPhy) !add this 
 !------------------- Energy initialization -----------------------------
 
 C====Input the initial condition from file====
-          open(2,file='initial.dat',status='old')
+          open(2,file='sd.dat',status='old')
 
           If (IEin==0) Then  ! read as energy density
             do 2562 I = NXPhy0,NXPhy

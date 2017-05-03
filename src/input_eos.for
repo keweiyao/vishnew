@@ -42,8 +42,8 @@
       common /EOScoeffs/ Pcoeff1, Pcoeff2, Scoeff1, Scoeff2,
      &                   Tcoeff1, Tcoeff2
 !=======common blocks end====================================================
-
-      open(5,FILE='eos.dat',STATUS='OLD')
+      character(len=1000) :: find_data_file
+      open(5,FILE=find_data_file('eos.dat'),STATUS='OLD')
       do I=1,EOSne
         read(5,*) ee, PEOSdata(I), SEOSdata(I), TEOSdata(I)
         if(I.eq.1) EOSe0 = ee
