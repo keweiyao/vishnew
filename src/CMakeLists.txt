@@ -7,6 +7,7 @@ add_executable(${PROJECT_NAME}
   osu_hydro.for
   phy_boundary.for
   util.for
+  Jetoutputh5.for
 )
 
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
