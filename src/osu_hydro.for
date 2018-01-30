@@ -169,7 +169,8 @@ C   [5] H.Song, Ph.D thesis 2009, arXiv:0908.3656 [nucl-th].
 C-----------------------------------------------------------------------
 C------------Adding back hydro history output to hdf5 file--------------
 C-----------------------------------------------------------------------
-      Call setHydroFiles(NX0, NX, DX, SKIP_XY, NY0, NY, DY, SKIP_XY, T0, DT, SKIP_T)
+      Call setHydroFiles(NX0, NX, DX, SKIP_XY, NY0, NY, DY, 
+     &          SKIP_XY, T0, DT, SKIP_T)
 
 
       Call Mainpro(NX0,NY0,NZ0,NX,NY,NZ,NXPhy0,NYPhy0,
