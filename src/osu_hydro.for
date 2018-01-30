@@ -29,6 +29,9 @@ C   [5] H.Song, Ph.D thesis 2009, arXiv:0908.3656 [nucl-th].
       Integer NX, NY, NZ
       Integer NX0,NY0, NZ0         ! dimension
 
+      Integer SKIP_XY, SKIP_T ! level of granularity for hydro profile
+      Common/Granularity/ SKIP_XY, SKIP_T
+
       Integer InitialURead
       Common/LDInitial/ InitialURead  ! IintURead =1 read initial velocity profile
 
@@ -121,6 +124,12 @@ C   [5] H.Song, Ph.D thesis 2009, arXiv:0908.3656 [nucl-th].
       Read(1,*) IRelaxBulk       ! bulk relaxation time: critical slowing down (0), constant (1), 1.5/(2*pi*T) (2), ?? (3), ?? (4)
       Read(1,*) BulkTau          ! constant bulk relaxation time for IRelaxBulk == 1
 
+      Read(1,*)
+      
+      ! hydro profile output granularity
+      Read(1,*) SKIP_T           ! output every SKIP_T timestep
+      Read(1,*) SKIP_XY           ! output every SKIP_XY x/y-step
+
       Close(1)
 
       ! read parameters from command line
@@ -160,7 +169,7 @@ C   [5] H.Song, Ph.D thesis 2009, arXiv:0908.3656 [nucl-th].
 C-----------------------------------------------------------------------
 C------------Adding back hydro history output to hdf5 file--------------
 C-----------------------------------------------------------------------
-      Call setHydroFiles(NX0, NX, DX, 2, NY0, NY, DY, 2, T0, DT, 2)
+      Call setHydroFiles(NX0, NX, DX, SKIP_XY, NY0, NY, DY, SKIP_XY, T0, DT, SKIP_T)
 
 
       Call Mainpro(NX0,NY0,NZ0,NX,NY,NZ,NXPhy0,NYPhy0,

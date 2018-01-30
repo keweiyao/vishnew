@@ -58,6 +58,9 @@
       double precision :: DX, DY
       common /DXY/ DX, DY
 
+      Integer SKIP_XY, SKIP_T ! level of granularity for hydro profile
+      Common/Granularity/ SKIP_XY, SKIP_T
+
       Double Precision Edec
       Common/Edec/Edec    !decoupling temperature
 
@@ -132,6 +135,9 @@
         If (varName=="zetaswidth") VisBulkWidth=DResult
         If (varName=="zetas_width") VisBulkWidth=DResult
         If (varName=="zeta_s_width") VisBulkWidth=DResult
+
+        If (varName=="iskip_t") SKIP_T=IResult
+        If (varName=="iskip_xy") SKIP_XY=IResult
 
         If (varName=="ils") LS=IResult
         If (varName=="nls") LS=IResult
