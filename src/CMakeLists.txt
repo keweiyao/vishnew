@@ -9,5 +9,5 @@ add_executable(${PROJECT_NAME}
   util.for
   Jetoutputh5.for
 )
-target_link_libraries(${PROJECT_NAME} ${HDF5_LIBRARIES})
+#target_link_libraries(${PROJECT_NAME} ${HDF5_LIBRARIES})
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
