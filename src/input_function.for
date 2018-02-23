@@ -63,6 +63,9 @@
 
       Double Precision Edec
       Common/Edec/Edec    !decoupling temperature
+      
+      Double Precision Temp_stop
+      Common/Temp_stop/Temp_stop ! hydro not stop until Temp_stop
 
       Integer InitialURead
       Common/LDInitial/ InitialURead  ! IintURead =1 read initial velocity profile
@@ -98,6 +101,7 @@
         If (varName=="edec") EDec=DResult ! decouple energy density, in GeV/fm^3
         If (varName=="e_dec") EDec=DResult
         If (varName=="e_d") EDec=DResult
+        If (varName=="stop") Temp_stop=DResult ! GeV
 
         If (varName=="t0") T0=DResult ! initial proper time tau_0, in fm/c
 
@@ -150,7 +154,7 @@
         If (varName=="initialuread") InitialURead=IResult ! read in initial flow velocity profiles
 
         If (varName=="initialpitensor") Initialpitensor=IResult ! initialization of pi tensor
-
+        
       End Do ! ArgIndex
 
       End Subroutine

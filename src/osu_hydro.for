@@ -61,7 +61,8 @@ C   [5] H.Song, Ph.D thesis 2009, arXiv:0908.3656 [nucl-th].
       double precision :: DX, DY
       common /DXY/ DX, DY
 
-      common/Edec/Edec    !decoupling energy density
+      common /Edec/Edec    !decoupling energy density
+      common /Temp_stop/Temp_stop ! Stop-hydro anyway if max(T) < this
 
       Integer MaxT
 
@@ -130,8 +131,12 @@ C   [5] H.Song, Ph.D thesis 2009, arXiv:0908.3656 [nucl-th].
       Read(1,*) SKIP_T           ! output every SKIP_T timestep
       Read(1,*) SKIP_XY           ! output every SKIP_XY x/y-step
 
-      Close(1)
+      Read(1,*)
+      
+      ! Hydro will not stop until this temp (a forced stop).
+      Read(1,*) Temp_stop
 
+      Close(1)
       ! read parameters from command line
       Call readInputFromCML2()
 
@@ -294,7 +299,7 @@ C-------------------------------------------------------------------------------
       Common /Tde/ Tde, Rdec1, Rdec2,TempIni !Decoupling Temperature !decoupling radius
       common/Edec/Edec
       common/Edec1/Edec1
-
+      common/Temp_stop/Temp_stop
       Common /Nsm/ Nsm
 
       Common/R0Aeps/ R0,Aeps
@@ -317,7 +322,8 @@ C-------------------------------------------------------------------------------
       Double Precision SEOSL7, PEOSL7, TEOSL7
       External SEOSL7
       Integer iRegulateCounter, iRegulateCounterBulkPi
-
+      
+      Double Precision max__ed, max__temp
 
       Edec1 = Edec
 
@@ -509,9 +515,10 @@ C-------------------------------------------------------------------------------
 
       Hc = HbarC
 
-
+      max__temp = maxval(Temp)*HBarC
+      max__ed = maxval(Ed)*HBarC  
       Print '(I4, 2X, F7.4, 2X, F12.6, 2X, F9.6, 2X, I2, 2X, I2)',
-     &      ITime, Time, maxval(Ed)*HBarC, maxval(Temp)*HBarC,
+     &      ITime, Time, max__ed, max__temp,
      &      iRegulateCounter, iRegulateCounterBulkPi
 
 C--------------------------------------------------------------------
@@ -521,6 +528,12 @@ C--------------------------------------------------------------------
      &      Temp*HbarC,Vx, Vy, Pi00*HbarC, Pi01*HbarC, Pi02*HbarC,
      &      Pi02*HbarC*0.0d0, Pi11*HbarC, Pi12*HbarC, Pi12*HbarC*0.0d0,
      &      Pi22*HbarC, Pi22*HbarC*0.0d0, Pi33*HbarC, PPI*HbarC)
+
+c     WK: hydro terminates whenever the maximum temperature is below
+c         Temp_stop
+      if (max__temp.LT.Temp_stop) then
+        goto 10000
+      end if
 
 C~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 C~~~~     Freezeout Procedure (rewritten from Petor's code azhydro0p2)  A   ~~~~
@@ -583,13 +596,17 @@ C      NDT = 5
           endif
 5400  CONTINUE
 
-      IF (NINT.EQ.0) THEN
-        goto 10000
-      END IF
+c     WK: This commented code below is the original terminate condition
+c         that hydro ends whenevere there is no freezeout at Edec 
+c         The new terminate condition is Temp_stop
+      !IF (NINT.eq.0) THEN
+      !  goto 10000
+      !END IF
 
       END IF    !  IF (MOD(N+1,NDT).EQ.0) THEN
 
       Time=Time+DT
+
 
 9999  Continue  !***********************  End Time Loop  ******************************************
 10000 Continue
