@@ -341,6 +341,13 @@ C-------------------------------------------------------------------------------
 
        do 9999 ITime = 1,MaxT
 !***********************  Begin  Time Loop ********************************
+C--------------------------------------------------------------------
+C--------------Add back Chun's hydro history output to hdf5 file-----
+C--------------------------------------------------------------------
+      Call writeHydroBlock(ITime-1, Ed*HbarC, Sd, PL*HbarC,
+     &      Temp*HbarC,Vx, Vy, Pi00*HbarC, Pi01*HbarC, Pi02*HbarC,
+     &      Pi02*HbarC*0.0d0, Pi11*HbarC, Pi12*HbarC, Pi12*HbarC*0.0d0,
+     &      Pi22*HbarC, Pi22*HbarC*0.0d0, Pi33*HbarC, PPI*HbarC)
 
 !   ---Zhi-Changes---
         Call determineR0(NX0,NY0,NZ0,NX,NY,NZ,Ed,PL,Sd,
@@ -521,14 +528,6 @@ C-------------------------------------------------------------------------------
      &      ITime, Time, max__ed, max__temp,
      &      iRegulateCounter, iRegulateCounterBulkPi
 
-C--------------------------------------------------------------------
-C--------------Add back Chun's hydro history output to hdf5 file-----
-C--------------------------------------------------------------------
-      Call writeHydroBlock(ITime-1, Ed*HbarC, Sd, PL*HbarC,
-     &      Temp*HbarC,Vx, Vy, Pi00*HbarC, Pi01*HbarC, Pi02*HbarC,
-     &      Pi02*HbarC*0.0d0, Pi11*HbarC, Pi12*HbarC, Pi12*HbarC*0.0d0,
-     &      Pi22*HbarC, Pi22*HbarC*0.0d0, Pi33*HbarC, PPI*HbarC)
-
 c     WK: hydro terminates whenever the maximum temperature is below
 c         Temp_stop
       if (max__temp.LT.Temp_stop) then
@@ -610,6 +609,15 @@ c         The new terminate condition is Temp_stop
 
 9999  Continue  !***********************  End Time Loop  ******************************************
 10000 Continue
+
+C--------------------------------------------------------------------
+C--------------The last time step-----
+C--------------------------------------------------------------------
+      Call writeHydroBlock(ITime, Ed*HbarC, Sd, PL*HbarC,
+     &      Temp*HbarC,Vx, Vy, Pi00*HbarC, Pi01*HbarC, Pi02*HbarC,
+     &      Pi02*HbarC*0.0d0, Pi11*HbarC, Pi12*HbarC, Pi12*HbarC*0.0d0,
+     &      Pi22*HbarC, Pi22*HbarC*0.0d0, Pi33*HbarC, PPI*HbarC)
+
 
       Return
       End
