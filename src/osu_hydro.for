@@ -325,7 +325,13 @@ C-------------------------------------------------------------------------------
       
       Double Precision max__ed, max__temp
 
+      Double Precision Pdec, Tdec, muBdec ! Pressure, T, mub atEdec
+      common /DEC/ Pdec, Tdec, muBdec
       Edec1 = Edec
+      ! WK: Pressure, Temperautre, mub at Edec
+      Pdec = PEOSL7(Edec) ! GeV/fm^3
+      Tdec = TEOSL7(Edec) ! GeV
+      muBdec = 0.0        ! GeV
 
 !=======================================================================
 !============ Initialization ===========================================
@@ -682,7 +688,11 @@ C###############################################################################
       double precision :: CPi00, CPi01, CPi02
       double precision :: CPi11, CPi12, CPi22, CPi33
       double precision :: CPPI
-
+!     WK
+      double precision :: Pdec, Tdec, muBdec
+      common/DEC/ Pdec, Tdec, muBdec
+      double precision :: ZeroHolder
+      
 !** Zhi ***
       Integer :: absI, absJ ! abs(I) and abs(J) used in the loop
       Integer :: I, J
@@ -756,15 +766,16 @@ C###############################################################################
      &             NX0,NY0,NX,NY,DTFreeze,DXFreeze,DYFreeze,CPi33)
            CALL P4(I,J,NDX,NDY,NDT,Vmidpoint,F0PPI,FPPI,
      &             NX0,NY0,NX,NY,DTFreeze,DXFreeze,DYFreeze,CPPI)
-
+ 
            write(99)
-     &       Tmid, Xmid, Ymid,
-     &       dSigma(:, iSurf),
-     &       v1mid, v2mid,
-     &       CPi00*HbarC, CPi01*HbarC, CPi02*HbarC,
-     &       CPi11*HbarC, CPi12*HbarC, CPi22*HbarC,
-     &       CPi33*HbarC,
-     &       CPPI*HbarC
+     &       Tmid, Xmid, Ymid, 0.0d0, ! eta=0
+     &       dSigma(:, iSurf), 0.0d0, ! dsigma_eta=0
+     &       v1mid, v2mid, 0.0d0,    ! v_eta=0 
+     &       CPi00*HbarC, CPi01*HbarC, CPi02*HbarC, 0.0d0,     ! pi03=0
+     &                    CPi11*HbarC, CPi12*HbarC, 0.0d0,     ! pi13=0
+     &                                 CPi22*HbarC, 0.0d0,     ! pi23=0
+     &                                              CPi33*HbarC,
+     &       CPPI*HbarC, Tdec, Edec, Pdec, muBdec
 
          Enddo  ! Nsurf
        ENDIF  ! intersect
